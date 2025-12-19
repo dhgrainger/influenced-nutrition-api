@@ -1,10 +1,4 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
-
   namespace :api do
     namespace :v1 do
       # Authentication routes
@@ -12,13 +6,26 @@ Rails.application.routes.draw do
       post 'auth/login', to: 'auth#login'
       get 'auth/me', to: 'auth#me'
       
+      # OmniAuth callback routes
+      get 'auth/:provider/callback', to: 'omniauth_callbacks#instagram_graph'
+      post 'auth/:provider/callback', to: 'omniauth_callbacks#instagram_graph'
+      get 'auth/failure', to: 'omniauth_callbacks#failure'
+      
       # User routes
-      resources :users, only: [:show, :update, :destroy]
+      resources :users, only: [:show, :update, :destroy] do
+        member do
+          delete 'disconnect_instagram', to: 'users#disconnect_instagram'
+        end
+      end
       
       # Health check
       get 'health', to: proc { [200, {}, ['OK']] }
     end
   end
-  # Defines the root path route ("/")
-  # root "posts#index"
+  
+  # OmniAuth routes (handled by middleware)
+  get '/auth/:provider', to: 'api/v1/omniauth_callbacks#passthru', as: :omniauth_authorize
+  
+  # Root path
+  root to: proc { [200, {}, ['Influenced Nutrition API v1.0']] }
 end

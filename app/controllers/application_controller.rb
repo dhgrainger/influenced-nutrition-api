@@ -1,5 +1,10 @@
 class ApplicationController < ActionController::API
+  include ActionController::Cookies
+  include ActionController::RequestForgeryProtection
+  
   before_action :authenticate_request
+  
+  protect_from_forgery with: :null_session, unless: -> { request.format.json? }
   
   attr_reader :current_user
   

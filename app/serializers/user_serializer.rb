@@ -1,3 +1,4 @@
+# app/serializers/user_serializer.rb
 class UserSerializer
   def initialize(user)
     @user = user
@@ -10,6 +11,8 @@ class UserSerializer
       name: @user.name,
       user_type: @user.user_type,
       created_at: @user.created_at,
+      instagram_connected: @user.instagram_connected?,
+      instagram_username: @user.instagram_username,
       profile: profile_data
     }
   end

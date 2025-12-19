@@ -56,5 +56,10 @@ group :development, :test do
   gem 'aws-sdk-s3' # For image uploads
   gem 'bcrypt', '~> 3.1.7'
   gem 'jwt'
+  gem 'dotenv-rails'
   # gem 'jsonapi-serializer'
 end
+
+gem 'omniauth'
+gem 'omniauth-instagram-graph'
+gem 'omniauth-rails_csrf_protection'

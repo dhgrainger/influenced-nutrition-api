@@ -1,0 +1,85 @@
+# Instagram OAuth Setup with OmniAuth
+
+## Step 1: Get Instagram App Credentials
+
+1. Go to [Facebook Developers](https://developers.facebook.com/)
+2. Create a new app or use existing one
+3. Add **Instagram Basic Display** product
+4. Under **Basic Display** settings:
+   - Add OAuth Redirect URI: `http://localhost:3000/auth/instagram_graph/callback`
+   - For production: `https://influenced-nutrition.com/auth/instagram_graph/callback`
+5. Copy your **Instagram App ID** and **Instagram App Secret**
+
+## Step 2: Update Gemfile
+
+Add these gems:
+
+```ruby
+gem 'omniauth'
+gem 'omniauth-instagram-graph'
+gem 'omniauth-rails_csrf_protection' # Required for security
+```
+
+Then run:
+```bash
+bundle install
+```
+
+## Step 3: Set Environment Variables
+
+Create or update `.env` file:
+
+```bash
+INSTAGRAM_APP_ID=your_app_id_here
+INSTAGRAM_APP_SECRET=your_app_secret_here
+```
+
+Add to `.gitignore`:
+```
+.env
+```
+
+Install dotenv gem for development:
+```ruby
+# Gemfile
+gem 'dotenv-rails', groups: [:development, :test]
+```
+
+## Step 4: Database Changes
+
+We'll add Instagram authentication alongside existing password auth, so users can:
+- Sign up with password (existing)
+- Sign up with Instagram
+- Link Instagram to existing account
+
+### New Migration:
+
+```bash
+rails generate migration AddOmniauthToUsers provider:string uid:string instagram_username:string instagram_token:string token_expires_at:datetime
+rails db:migrate
+```
+
+## Step 5: Create OmniAuth Initializer
+
+Create `config/initializers/omniauth.rb`
+
+## Step 6: Update User Model
+
+We'll keep existing password auth and add Instagram auth support.
+
+## Step 7: Create OmniAuth Callback Controller
+
+Handle Instagram login callbacks.
+
+## Step 8: Update Routes
+
+Add OmniAuth routes.
+
+## Testing:
+
+Start server and visit:
+```
+http://localhost:3000/auth/instagram_graph
+```
+
+This will redirect to Instagram for authorization!

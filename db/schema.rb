@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_19_020913) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_19_225449) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -36,12 +36,19 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_19_020913) do
 
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "email", null: false
+    t.string "email"
+    t.string "instagram_token"
+    t.string "instagram_username"
     t.string "name", null: false
-    t.string "password_digest", null: false
+    t.string "password_digest"
+    t.string "provider"
+    t.datetime "token_expires_at"
+    t.string "uid"
     t.datetime "updated_at", null: false
     t.integer "user_type", default: 0, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["instagram_username"], name: "index_users_on_instagram_username"
+    t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
     t.index ["user_type"], name: "index_users_on_user_type"
   end
 

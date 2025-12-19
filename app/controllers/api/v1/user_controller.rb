@@ -1,4 +1,3 @@
-# app/controllers/api/v1/users_controller.rb
 module Api
   module V1
     class UsersController < ApplicationController
@@ -23,6 +22,22 @@ module Api
       def destroy
         @user.destroy
         head :no_content
+      end
+      
+      # DELETE /api/v1/users/:id/disconnect_instagram
+      def disconnect_instagram
+        if @current_user.id == params[:id].to_i
+          @current_user.update(
+            provider: nil,
+            uid: nil,
+            instagram_token: nil,
+            instagram_username: nil,
+            token_expires_at: nil
+          )
+          render json: { message: 'Instagram disconnected successfully' }, status: :ok
+        else
+          render json: { error: 'Unauthorized' }, status: :forbidden
+        end
       end
       
       private
