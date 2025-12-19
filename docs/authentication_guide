@@ -1,0 +1,70 @@
+Authentication Setup for Influenced Nutrition API
+Step 1: Add Required Gems
+Add these to your Gemfile:
+
+ruby
+# Gemfile
+gem 'bcrypt', '~> 3.1.7'  # For password encryption
+gem 'jwt'                  # For JSON Web Tokens
+gem 'rack-cors'            # For CORS (React frontend)
+Then run:
+
+bash
+bundle install
+Step 2: Configure CORS
+Update config/initializers/cors.rb:
+
+ruby
+# config/initializers/cors.rb
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    origins 'http://localhost:3000', 'http://localhost:5173', 'https://influenced-nutrition.com'
+    
+    resource '*',
+      headers: :any,
+      methods: [:get, :post, :put, :patch, :delete, :options, :head],
+      credentials: true
+  end
+end
+Step 3: Generate User Model
+Run these commands:
+
+bash
+rails generate model User email:string password_digest:string user_type:integer name:string
+rails generate model InfluencerProfile user:references bio:text instagram_handle:string follower_count:integer commission_rate:decimal
+rails generate model SubscriberProfile user:references dietary_preferences:text
+Step 4: Update User Migration
+Edit the migration file in db/migrate/XXXXXX_create_users.rb to add indexes and constraints.
+
+Step 5: Create Auth Controllers
+bash
+rails generate controller Api::V1::Auth
+rails generate controller Api::V1::Users
+Step 6: Database Setup
+bash
+rails db:create
+rails db:migrate
+Step 7: Test the API
+Start your server:
+
+bash
+rails server
+Test signup:
+
+bash
+curl -X POST http://localhost:3000/api/v1/auth/signup \
+  -H "Content-Type: application/json" \
+  -d '{"user":{"email":"test@example.com","password":"password123","name":"Test User","user_type":"subscriber"}}'
+Files to Create
+I'll generate these files for you in separate artifacts:
+
+User model
+InfluencerProfile model
+SubscriberProfile model
+JWT Service
+Auth Controller
+Users Controller
+Routes configuration
+User Serializer
+Each file will be ready to copy directly into your project!
+
