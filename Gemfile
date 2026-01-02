@@ -54,7 +54,7 @@ group :development, :test do
   gem 'active_model_serializers' # JSON formatting
   gem 'stripe' # For payments (later)
   gem 'aws-sdk-s3' # For image uploads
-  gem 'bcrypt', '~> 3.1.7'
+  gem 'bcrypt', '~> 3.1.21'
   gem 'jwt'
   gem 'dotenv-rails'
   # gem 'jsonapi-serializer'
